@@ -60,7 +60,7 @@ app.use(cookieParser());
 app.use(cors(corsOption));
 
 app.get("/", (req, res) => {
-    res.json("hello its chatAPI");
+    res.json("hello its chat app API");
 });
 
 app.get('/favicon.ico', (req, res) => {
