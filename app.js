@@ -24,7 +24,7 @@ try {
     process.exit(1); // Exit process if .env fails
 }
 
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = `mongodb+srv://nikhilchandurkar125:${process.env.Mongo_password}@cluster0.ulslu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 const port = process.env.PORT || 3000;
 
 // Database connection
