@@ -21,21 +21,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: build docker Image
+      - name: Build Docker Image
         run: docker build -t nikhil2523/chat-app-backend . 
       
-      - name: publish docker image
-        run : docker push nikhil2523/chat-app-backend:latest 
+      - name: Publish Docker Image
+        run: docker push nikhil2523/chat-app-backend:latest 
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: pull image from docker hub
+      - name: Pull Image from Docker Hub
         run: docker pull nikhil2523/chat-app-backend:latest 
+
       - name: Run Docker Container
-        run: docker run -d  -p 3000:3000 \
-            --name nodejs-app-container
+        run: |
+          docker run -d \
+            -p 3000:3000 \
+            --name nodejs-app-container \
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
             -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
@@ -45,4 +48,3 @@ jobs:
             -e PORT=${{ secrets.PORT }} \
             -e NODE_ENV=production \
             nikhil2523/chat-app-backend:latest
-            
