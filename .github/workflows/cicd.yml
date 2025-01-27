@@ -38,12 +38,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Stop existing container
-        run: docker stop node-js-app-container || true
-        continue-on-error: true
+        run: docker stop node-js-app-container
 
       - name: Remove existing container
-        run: docker rm node-js-app-container || true
-        continue-on-error: true
+        run: docker rm node-js-app-container 
 
       - name: Pull Image from Docker Hub
         run: docker pull nikhil2523/chat-app-backend:latest
@@ -56,5 +54,5 @@ jobs:
             -p 3000:3000 \
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e NODE_ENV=production \
-            
             nikhil2523/chat-app-backend:latest
+            
