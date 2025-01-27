@@ -56,7 +56,9 @@ jobs:
             -p 3000:3000 \
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
             -e NODE_ENV=production \
+            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e CLIENT_URL=${{ secrets.CLIENT_URL }} \
             nikhil2523/chat-app-backend:latest
-
-      
-      
