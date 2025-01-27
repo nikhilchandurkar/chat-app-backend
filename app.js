@@ -67,10 +67,7 @@ app.get("/hello", (req, res) => {
     res.json("hello from nikki");
 });
 
-app.get('/favicon.ico', (req, res) => {
-    console.log('Favicon requested');
-    res.json("its favicon")
-  });
+
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
 app.use("/api/v1/admin", adminRoute);
