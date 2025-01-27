@@ -18,36 +18,52 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Build Docker Image
-        run: docker build -t nikhil2523/chat-app-backend . 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       
-      - name: Publish Docker Image
-        run: docker push nikhil2523/chat-app-backend:latest 
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: nikhil2523/chat-app-backend:latest,nikhil2523/chat-app-backend:${{ github.sha }}
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull Image from Docker Hub
-        run: docker pull nikhil2523/chat-app-backend:latest 
-
-      - name: Stop and Remove Existing Container (if exists)
+        run: docker pull nikhil2523/chat-app-backend:latest
+      
+      - name: Delete Old Container
         run: |
-          docker stop nodejs-app-container || true
-          docker rm nodejs-app-container || true
+          if docker ps -a --format '{{.Names}}' | grep -q '^nodejs-app-container$'; then
+            docker stop nodejs-app-container
+            docker rm nodejs-app-container
+          fi
+        continue-on-error: true
 
       - name: Run Docker Container
         run: |
           docker run -d \
             -p 3000:3000 \
             --name nodejs-app-container \
-            -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-              -e MONGO_URI=${{ secrets.MONGO_URI }} \
-            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
-            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
-            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
-            -e DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} \
-            -e DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} \
-            -e PORT=${{ secrets.PORT }} \
+            --restart unless-stopped \
+            -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' \
+            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+            -e CLOUDINARY_API_KEY='${{ secrets.CLOUDINARY_API_KEY }}' \
+            -e CLOUDINARY_API_SECRET='${{ secrets.CLOUDINARY_API_SECRET }}' \
+            -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
+            -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
+            -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
+            -e PORT='${{ secrets.PORT }}' \
             -e NODE_ENV=production \
             nikhil2523/chat-app-backend:latest
+
+      - name: Verify Container is Running
+        run: |
+          if ! docker ps | grep -q nodejs-app-container; then
+            echo "Container failed to start"
+            docker logs nodejs-app-container
+            exit 1
+          fi
