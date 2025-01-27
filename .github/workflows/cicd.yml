@@ -53,6 +53,12 @@ jobs:
             --restart unless-stopped \
             -p 3000:3000 \
             -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+            -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+            -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+            -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+            -e DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} \
+            -e DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} \
+            -e PORT=${{ secrets.PORT }} \
             -e NODE_ENV=production \
             nikhil2523/chat-app-backend:latest
             
