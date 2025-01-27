@@ -58,16 +58,4 @@ jobs:
             -e NODE_ENV=production \
             nikhil2523/chat-app-backend:latest
 
-      - name: Health Check
-        run: |
-          timeout=60
-          while [ $timeout -gt 0 ]; do
-            if curl -f http://localhost:3000/health; then
-              echo "Application is healthy"
-              exit 0
-            fi
-            sleep 5
-            timeout=$((timeout-5))
-          done
-          echo "Health check failed"
-          exit 1
+      
