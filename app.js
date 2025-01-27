@@ -63,6 +63,9 @@ app.use(cors(corsOption));
 app.get("/", (req, res) => {
     res.json("hello its chat app API");
 });
+app.get("/hello", (req, res) => {
+    res.json("hello from nikki");
+});
 
 app.get('/favicon.ico', (req, res) => {
     console.log('Favicon requested');
