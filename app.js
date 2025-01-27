@@ -25,12 +25,13 @@ try {
 }
 const password = process.env.mongo_password
 
-const MONGO_URI = `mongodb+srv://nikhilchandurkar125:${password}@cluster0.ulslu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const MONGO_URI_1 = `mongodb+srv://nikhilchandurkar125:${password}@cluster0.ulslu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const MONGO_URI_2 = process.env.MONGO_URI
 const port = process.env.PORT || 3000;
 
 // Database connection
 try {
-    connectDB(MONGO_URI);  
+    connectDB(MONGO_URI_1 || MONGO_URI_2);  
 } catch (error) {
     console.error("Database connection failed:", error);
     process.exit(1); // Exit process if DB connection fails
