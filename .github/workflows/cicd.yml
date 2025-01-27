@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   build:
@@ -21,30 +21,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: build docker Image
+        run: docker build -t nikhil2523/chat-app-backend . 
       
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            nikhil2523/chat-app-backend:latest
-            nikhil2523/chat-app-backend:${{ github.sha }}
+      - name: publish docker image
+        run : docker push nikhil2523/chat-app-backend:latest 
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Stop existing container
-        run: docker stop node-js-app-container
+      - name: pull image from docker hub
+        run: docker pull nikhil2523/chat-app-backend:latest 
 
-      - name: Remove existing container
-        run: docker rm node-js-app-container 
-
-      - name: Pull Image from Docker Hub
-        run: docker pull nikhil2523/chat-app-backend:latest
 
       - name: Run Docker Container
         run: |
