@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  # pull_request:
-  #   branches:
-  #     - main
 
 jobs:
   build:
@@ -33,6 +30,11 @@ jobs:
     steps:
       - name: Pull Image from Docker Hub
         run: docker pull nikhil2523/chat-app-backend:latest 
+
+      - name: Stop and Remove Existing Container (if exists)
+        run: |
+          docker stop nodejs-app-container || true
+          docker rm nodejs-app-container || true
 
       - name: Run Docker Container
         run: |
