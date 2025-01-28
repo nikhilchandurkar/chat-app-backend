@@ -56,10 +56,8 @@ jobs:
             -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
             -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
             -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
-            -e PORT='${{ secrets.PORT }}' \
             -e NODE_ENV=production \
             nikhil2523/chat-app-backend:latest
-
       - name: Verify Container is Running
         run: |
           if ! docker ps | grep -q nodejs-app-container; then
