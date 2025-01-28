@@ -45,22 +45,27 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          docker run -d -p 3000:3000 \
-            --name nodejs-app-container \
-            --restart unless-stopped \
-            -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' \
-            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
-            -e CLOUDINARY_API_KEY='${{ secrets.CLOUDINARY_API_KEY }}' \
-            -e CLOUDINARY_API_SECRET='${{ secrets.CLOUDINARY_API_SECRET }}' \
-            -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
-            -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
-            -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
-            -e NODE_ENV=production \
-            nikhil2523/chat-app-backend:latest
+          docker run -d \
+          -p 3000:3000 \
+          --name nodejs-app-container \
+          --restart unless-stopped \
+          -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' \
+          -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+          -e CLOUDINARY_API_KEY='${{ secrets.CLOUDINARY_API_KEY }}' \
+          -e CLOUDINARY_API_SECRET='${{ secrets.CLOUDINARY_API_SECRET }}' \
+          -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
+          -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
+          -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
+          -e NODE_ENV=production \
+          nikhil2523/chat-app-backend:latest
+      
       - name: Verify Container is Running
         run: |
           if ! docker ps | grep -q nodejs-app-container; then
             echo "Container failed to start"
             docker logs nodejs-app-container
             exit 1
+          else
+            echo "Container is running"
+            docker ps --filter "name=nodejs-app-container" --format "App is running on port(s): {{.Ports}}"
           fi
