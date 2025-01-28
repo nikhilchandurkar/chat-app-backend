@@ -2,7 +2,7 @@
 
 const corsOption = {
     origin: [
-        "https://3.6.102.111/",
+        "http://3.6.102.111/",
         "http://localhost:5173",
         // "http://localhost:4173",
         // 'https://chat-app-client-lime-three.vercel.app/',
