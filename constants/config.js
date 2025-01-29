@@ -5,7 +5,6 @@ const corsOption = {
         "http://localhost:5173",
         'https://chat-app-frontend-wine-two.vercel.app',
         process.env.CLIENT_URL,
-        process.env.NODE_ENV === 'production' ,
         "http://localhost:3000",
     ],
     methods:["GET",

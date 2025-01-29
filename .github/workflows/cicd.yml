@@ -54,6 +54,7 @@ jobs:
           -e CLOUDINARY_API_KEY='${{ secrets.CLOUDINARY_API_KEY }}' \
           -e CLOUDINARY_API_SECRET='${{ secrets.CLOUDINARY_API_SECRET }}' \
           -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
+          -e CLIENT_URL='${{ secrets.CLIENT_URL }}' \
           -e NODE_ENV=production \
           nikhil2523/chat-app-backend:latest
 
