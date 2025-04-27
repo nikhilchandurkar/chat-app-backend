@@ -24,8 +24,8 @@ try {
     process.exit(1); // Exit process if .env fails
 }
 const password = process.env.mongo_password
-const MONGO_URI = `mongodb+srv://nikhilchandurkar125:${password}@cluster0.ulslu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-// const MONGO_URI_2 = process.env.MONGO_URI
+// const MONGO_URI = `mongodb+srv://nikhilchandurkar125:${password}@cluster0.ulslu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const MONGO_URI = process.env.MONGO_URI
 const port = process.env.PORT || 3000;
 
 // Database connection
@@ -141,4 +141,6 @@ server.listen(port, () => {
     console.log(`Server is running at port ${port} in ${process.env.NODE_ENV || "development"}`);
 });
 
-export { app, userSocketIDs };
+// Export userSocketIDs as a named export and app as the default export
+export { userSocketIDs };
+export default app;
