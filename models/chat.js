@@ -22,11 +22,7 @@ const schema = new Schema({
 }, {
     timestamps: true
 });
-// optional 
-/*
-schema.index({ creator: 1 });
-schema.index({ members: 1 });
- */
+
  
 
 export const Chat = mongoose.models.Chat || model("Chat", schema);  

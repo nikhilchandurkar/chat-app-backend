@@ -1,30 +1,33 @@
+# ----------- Build stage -----------
+FROM node:18-alpine AS build
 
-# FROM node:alpine3.19
-# WORKDIR /app
-# COPY package.json ./
-# RUN npm install
-# COPY . .
-# EXPOSE 3000
-# CMD [ "npm" ,"run", "start"]
+# Set working directory
+WORKDIR /usr/src/app
 
+# Copy package.json and package-lock.json first
+COPY package*.json ./
 
+# Install dependencies (production only)
+RUN npm ci --only=production
 
-
-# Use official Node.js Alpine image for smaller size
-FROM node:alpine3.19
-
-# Set working directory inside the container
-WORKDIR /app
-
-# Copy package.json and install dependencies
-COPY package.json package-lock.json* ./
-RUN npm install
-
-# Copy the rest of the application code
+# Copy the rest of the code
 COPY . .
 
-# Expose the port the app runs on
+# ----------- Production image -----------
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy only the necessary files from build stage
+COPY --from=build /usr/src/app /usr/src/app
+
+# Expose port
 EXPOSE 3000
 
+# Set runtime env variables — ideally set these via your deployment platform (docker run -e ... / ECS / k8s / etc)
+ENV NODE_ENV=production \
+    PORT=3000
+
 # Start the app
-CMD [ "npm", "run", "start" ]
+CMD ["node", "app.js"]
